@@ -1,0 +1,81 @@
+{
+    "title": "Global Trade Solutions - Import/Export Excellence",
+    "Navbar": {
+        "home": "Home",
+        "about": "About",
+        "services": "Services",
+        "tracking": "Tracking",
+        "testimonials": "Testimonials",
+        "contact": "Contact",
+        "blog": "Blog"
+    },
+    "hero": {
+        "heading": "Global Trade Solutions",
+        "description": "Connecting businesses worldwide through seamless import, export, and logistics solutions. Your trusted partner for international trade success.",
+        "tracking": "Quick Package Tracking",
+        "tracking_placeholder": "Enter tracking code...",
+        "track_now": "Track Now",
+        "try_sample": "Try: GT2024001234",
+        "get_quote": "Get Quote",
+        "our_services": "Our Services",
+        "mission": "Mission",
+        "vision": "Vision",
+        "values": "Values",
+        "simplify_trade": "Simplify global trade",
+        "leading_solutions": "Leading trade solutions",
+        "trust_excellence": "Trust & Excellence"
+    },
+    "about": {
+        "heading": "About Global Trade Solutions",
+        "description": "Over 20 years of excellence in international trade, connecting businesses across continents with reliable, efficient solutions.",
+        "history": {
+            "heading": "Our History",
+            "description": "Founded in 2003, we've grown from a small freight forwarder to a global trade solutions leader, serving over 5,000 clients worldwide."
+        },
+        "team": {
+            "heading": "Expert Team",
+            "description": "Our team of 150+ trade professionals brings decades of combined experience in customs, logistics, and international regulations."
+        },
+        "certifications": {
+            "heading": "Certifications",
+            "description": "ISO 9001:2015 certified, AEO status, and member of FIATA. Our commitment to quality and compliance is unmatched."
+        }
+    },
+    "services": {
+        "heading": "Our Services",
+        "description": "Comprehensive trade solutions tailored to your business needs",
+        "import_services": {
+            "heading": "Import Services",
+            "description": "Streamlined import processes with full customs clearance, documentation, and compliance management."
+        },
+        "export_solutions": {
+            "heading": "Export Solutions",
+            "description": "End-to-end export services helping you reach global markets efficiently and cost-effectively."
+        },
+        "logistics_management": {
+            "heading": "Logistics Management",
+            "description": "Comprehensive logistics solutions including warehousing, transportation, and supply chain optimization."
+        }
+    },
+    "contact": {
+        "heading": "Contact Us",
+        "description": "Get in touch for a consultation or quote",
+        "send_message": "Send us a message",
+        "contact_info": "Contact Information"
+    },
+    "footer": {
+        "company_info": "Your trusted partner for international trade excellence. Connecting businesses worldwide since 2003.",
+        "quick_links": {
+            "about": "About Us",
+            "track_package": "Track Package",
+            "contact": "Contact",
+            "blog": "Blog"
+        },
+        "contact": {
+            "phone": "+1 (555) 123-4567",
+            "email": "info@globaltradesolutions.com",
+            "address": "123 Trade Center Blvd, NY"
+        },
+        "rights_reserved": "All rights reserved."
+    }
+}

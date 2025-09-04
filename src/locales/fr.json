@@ -1,0 +1,81 @@
+{
+    "title": "Solutions Commerciales Mondiales - Excellence en Import/Export",
+    "Navbar": {
+        "home": "Accueil",
+        "about": "À Propos",
+        "services": "Services",
+        "tracking": "Suivi",
+        "testimonials": "Témoignages",
+        "contact": "Contact",
+        "blog": "Blog"
+    },
+    "hero": {
+        "heading": "Excellence Commerciale Mondiale",
+        "description": "Connecter les entreprises du monde entier grâce à des solutions d'importation, d'exportation et de logistique transparentes. Votre partenaire de confiance pour le succès du commerce international.",
+        "tracking": "Suivi Rapide de Colis",
+        "tracking_placeholder": "Entrez votre code de suivi...",
+        "track_now": "Suivre Maintenant",
+        "try_sample": "Essayez: GT2024001234",
+        "get_quote": "Obtenir un Devis",
+        "our_services": "Nos Services",
+        "mission": "Mission",
+        "vision": "Vision",
+        "values": "Valeurs",
+        "simplify_trade": "Simplifier le commerce mondial",
+        "leading_solutions": "Solutions commerciales de pointe",
+        "trust_excellence": "Confiance & Excellence"
+    },
+    "about": {
+        "heading": "À Propos de Solutions Commerciales Mondiales",
+        "description": "Plus de 20 ans d'excellence dans le commerce international, connectant les entreprises à travers les continents avec des solutions fiables et efficaces.",
+        "history": {
+            "heading": "Notre Histoire",
+            "description": "Fondée en 2003, nous avons évolué d'un petit transitaire à un leader mondial des solutions commerciales, servant plus de 5 000 clients dans le monde."
+        },
+        "team": {
+            "heading": "Équipe d'Experts",
+            "description": "Notre équipe de plus de 150 professionnels du commerce apporte des décennies d'expérience combinée en douanes, logistique et réglementations internationales."
+        },
+        "certifications": {
+            "heading": "Certifications",
+            "description": "Certifié ISO 9001:2015, statut OEA, et membre de la FIATA. Notre engagement envers la qualité et la conformité est inégalé."
+        }
+    },
+    "services": {
+        "heading": "Nos Services",
+        "description": "Solutions commerciales complètes adaptées aux besoins de votre entreprise",
+        "import_services": {
+            "heading": "Services d'Importation",
+            "description": "Processus d'importation rationalisés avec dédouanement complet, documentation et gestion de la conformité."
+        },
+        "export_solutions": {
+            "heading": "Solutions d'Exportation",
+            "description": "Services d'exportation de bout en bout vous aidant à atteindre les marchés mondiaux de manière efficace et rentable."
+        },
+        "logistics_management": {
+            "heading": "Gestion Logistique",
+            "description": "Solutions logistiques complètes incluant l'entreposage, le transport et l'optimisation de la chaîne d'approvisionnement."
+        }
+    },
+    "contact": {
+        "heading": "Contactez-Nous",
+        "description": "Contactez-nous pour une consultation ou un devis",
+        "send_message": "Envoyez-nous un message",
+        "contact_info": "Informations de Contact"
+    },
+    "footer": {
+        "company_info": "Votre partenaire de confiance pour l'excellence du commerce international. Connecter les entreprises du monde entier depuis 2003.",
+        "quick_links": {
+            "about": "À Propos",
+            "track_package": "Suivre un Colis",
+            "contact": "Contact",
+            "blog": "Blog"
+        },
+        "contact": {
+            "phone": "+1 (555) 123-4567",
+            "email": "info@globaltradesolutions.com",
+            "address": "123 Trade Center Blvd, NY"
+        },
+        "rights_reserved": "Tous droits réservés."
+    }
+}

@@ -1,6 +1,6 @@
 'use client'
 
-import logo from '@/components/logo.png'
+
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
@@ -28,7 +28,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center mb-4">
-            <Image src={logo} alt="Global Trade Solutions" className="mr-3" width={40} height={40} />
+            <Image src={"/logo.png"} alt="Global Trade Solutions" className="mr-3" width={40} height={40} />
             <span className="font-bold text-xl">Global Trade Solutions</span>
           </div>
 

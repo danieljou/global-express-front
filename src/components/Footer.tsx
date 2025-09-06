@@ -1,6 +1,6 @@
 'use client';
 
-import logo from '@/components/logo.png';
+
 import { faFacebook, faInstagram, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faMapMarkerAlt, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -46,7 +46,7 @@ export default function Footer(): JSX.Element {
           {/* Company Info */}
           <div>
             <div className="flex items-center mb-4">
-              <Image src={logo} alt="Global Trade Solutions" className="mr-3" width={40} height={40} />
+              <Image src={"/logo.png"} alt="Global Trade Solutions" className="mr-3" width={40} height={40} />
               <span className="font-bold text-xl">Global Trade Solutions</span>
             </div>
 

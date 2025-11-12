@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useCallback } from 'react'
 import type L from 'leaflet'
-
+import 'leaflet/dist/leaflet.css';
 export interface RoutePoint {
   lat: number
   lng: number

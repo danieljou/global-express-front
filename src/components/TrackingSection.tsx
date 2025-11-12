@@ -243,7 +243,31 @@ const downloadTicket = () => {
 };
 
 
-  const printTicket = () => window.print()
+  const printTicket = () => {
+  const content = document.getElementById('track');
+  if (!content) return;
+
+  const printWindow = window.open('', '', 'width=800,height=600');
+  if (!printWindow) return;
+
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Tracking Ticket</title>
+        <style>
+          body { font-family: sans-serif; padding: 20px; }
+        </style>
+      </head>
+      <body>${content.innerHTML}</body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
+  printWindow.close();
+};
+ 
+  // window.print()
  return (
   <section id="tracking" className="py-20 bg-white dark:bg-gray-900">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -306,7 +330,7 @@ const downloadTicket = () => {
 
       {/* Tracking Results */}
       {trackingData && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <div id="track" className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
           {/* Header with Barcode and Actions */}
           <div className="bg-gray-100 dark:bg-gray-700 px-8 py-4 border-b border-gray-200 dark:border-gray-600">
             <div className="flex items-center justify-between">

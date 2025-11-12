@@ -77,156 +77,171 @@ interface TrackingSectionProps {
 // --- Component ---
 
 export default function TrackingSection({ heroTrackingData }: TrackingSectionProps) {
-  const searchParams = useSearchParams()
-  const urlTrackingCode = searchParams.get('code')
+  const searchParams = useSearchParams();
+const urlTrackingCode = searchParams.get('code');
 
-  const [trackingCode, setTrackingCode] = useState<string>('')
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
-  const [trackingData, setTrackingData] = useState<TrackingData | null>(null)
-  const [currentSpeed, setCurrentSpeed] = useState<number>(1)
+const [trackingCode, setTrackingCode] = useState<string>('');
+const [isLoading, setIsLoading] = useState<boolean>(false);
+const [error, setError] = useState<string | null>(null);
+const [trackingData, setTrackingData] = useState<TrackingData | null>(null);
+const [currentSpeed, setCurrentSpeed] = useState<number>(1);
 
-  // Generate route points for the map
-  const generateRoutePoints = (data: TrackingData | null) => {
-    if (!data) return []
+// Generate route points for the map
+const generateRoutePoints = (data: TrackingData | null) => {
+  if (!data) return [];
 
-    const points: { lat: number; lng: number; name: string; status: string; date: string; remarks?: string; updated_by?: string; type: string }[] = []
+  const points: {
+    lat: number;
+    lng: number;
+    name: string;
+    status: string;
+    date: string;
+    remarks?: string;
+    updated_by?: string;
+    type: string;
+  }[] = [];
 
-    if (data.sender_coordinates?.length === 2) {
+  if (data.sender_coordinates?.length === 2) {
+    points.push({
+      lat: data.sender_coordinates[0],
+      lng: data.sender_coordinates[1],
+      name: `${data.sender_name} - ${data.sender_address}`,
+      status: "Shipped",
+      date: data.created_at ? new Date(data.created_at).toLocaleString('en-GB') : "N/A",
+      type: "sender"
+    });
+  }
+
+  data.history?.forEach((historyItem, index) => {
+    if (historyItem.coordinates?.length === 2) {
       points.push({
-        lat: data.sender_coordinates[0],
-        lng: data.sender_coordinates[1],
-        name: `${data.sender_name} - ${data.sender_address}`,
-        status: "Expédié",
-        date: data.created_at ? new Date(data.created_at).toLocaleString('fr-FR') : "N/A",
-        type: "sender"
-      })
+        lat: historyItem.coordinates[0],
+        lng: historyItem.coordinates[1],
+        name: historyItem.location || `Point ${index + 1}`,
+        status: historyItem.status || "In transit",
+        date: `${new Date(historyItem.date).toLocaleDateString('en-GB')} ${historyItem.time}`,
+        remarks: historyItem.remarks,
+        updated_by: historyItem.updated_by,
+        type: "history"
+      });
     }
+  });
 
-    data.history?.forEach((historyItem, index) => {
-      if (historyItem.coordinates?.length === 2) {
-        points.push({
-          lat: historyItem.coordinates[0],
-          lng: historyItem.coordinates[1],
-          name: historyItem.location || `Point ${index + 1}`,
-          status: historyItem.status || "En transit",
-          date: `${new Date(historyItem.date).toLocaleDateString('fr-FR')} ${historyItem.time}`,
-          remarks: historyItem.remarks,
-          updated_by: historyItem.updated_by,
-          type: "history"
-        })
-      }
-    })
-
-    if (data.receiver_coordinates?.length === 2) {
-      const isDelivered = data.status === 'delivered'
-      points.push({
-        lat: data.receiver_coordinates[0],
-        lng: data.receiver_coordinates[1],
-        name: `${data.receiver_name} - ${data.receiver_address}`,
-        status: isDelivered ? "Livré" : "Destination",
-        date: data.expected_delivery_date ? new Date(data.expected_delivery_date).toLocaleDateString('fr-FR') : "N/A",
-        type: "receiver"
-      })
-    }
-
-    return points
+  if (data.receiver_coordinates?.length === 2) {
+    const isDelivered = data.status === 'delivered';
+    points.push({
+      lat: data.receiver_coordinates[0],
+      lng: data.receiver_coordinates[1],
+      name: `${data.receiver_name} - ${data.receiver_address}`,
+      status: isDelivered ? "Delivered" : "Destination",
+      date: data.expected_delivery_date
+        ? new Date(data.expected_delivery_date).toLocaleDateString('en-GB')
+        : "N/A",
+      type: "receiver"
+    });
   }
 
-  // Receive heroTrackingData
-  useEffect(() => {
-    if (heroTrackingData) {
-      setTrackingCode(heroTrackingData.trackingCode)
-      setTrackingData(heroTrackingData.trackingData)
-      setError(null)
-    }
-  }, [heroTrackingData])
+  return points;
+};
 
-  // Handle URL tracking code
-  useEffect(() => {
-    if (urlTrackingCode && !heroTrackingData) {
-      setTrackingCode(urlTrackingCode)
-      fetchTrackingData(urlTrackingCode)
-    }
-  }, [urlTrackingCode, heroTrackingData])
-
-  const fetchTrackingData = async (code: string) => {
-    setIsLoading(true)
-    setError(null)
-
-    const apiUrl = process.env.NEXT_PUBLIC_DJNANGO_API_URL
-    const url = `${apiUrl}${code}/`
-
-    try {
-      const response = await fetch(url)
-      if (!response.ok) {
-        if (response.status === 404) throw new Error('Code de suivi non trouvé.')
-        throw new Error(`Échec de récupération des données (Status: ${response.status})`)
-      }
-      const data: TrackingData = await response.json()
-      setTrackingData(data)
-      } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message)
-      } else {
-        setError('Une erreur inconnue est survenue.')
-      }
-      setTrackingData(null)
-    }
-
+// Receive heroTrackingData
+useEffect(() => {
+  if (heroTrackingData) {
+    setTrackingCode(heroTrackingData.trackingCode);
+    setTrackingData(heroTrackingData.trackingData);
+    setError(null);
   }
+}, [heroTrackingData]);
 
-  const handleSubmit = (e?: React.FormEvent) => {
-    e?.preventDefault()
-    if (!trackingCode.trim()) {
-      setError('Veuillez saisir un code de suivi')
-      return
+// Handle URL tracking code
+useEffect(() => {
+  if (urlTrackingCode && !heroTrackingData) {
+    setTrackingCode(urlTrackingCode);
+    fetchTrackingData(urlTrackingCode);
+  }
+}, [urlTrackingCode, heroTrackingData]);
+
+const fetchTrackingData = async (code: string) => {
+  setIsLoading(true);
+  setError(null);
+
+  const apiUrl = process.env.NEXT_PUBLIC_DJNANGO_API_URL;
+  const url = `${apiUrl}${code}/`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      if (response.status === 404) throw new Error('Tracking code not found.');
+      throw new Error(`Failed to fetch data (Status: ${response.status})`);
     }
-    fetchTrackingData(trackingCode.trim())
-  }
-
-  const routePoints = generateRoutePoints(trackingData)
-
-  // Helper display functions
-  const getStatusDisplayText = (status: string) => {
-    const statusMap: Record<string, string> = {
-      'pre_transit': 'Pré-transit',
-      'in_transit': 'En transit',
-      'out_for_delivery': 'En cours de livraison',
-      'delivered': 'Livré',
-      'returned': 'Retourné'
+    const data: TrackingData = await response.json();
+    setTrackingData(data);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      setError(err.message);
+    } else {
+      setError('An unknown error occurred.');
     }
-    return statusMap[status] || status
+    setTrackingData(null);
+  } finally {
+    setIsLoading(false);
   }
+};
 
-  const getShippingModeText = (mode?: string) => {
-    const modeMap: Record<string, string> = {
-      'land': 'Transport terrestre',
-      'air': 'Transport aérien',
-      'sea': 'Transport maritime'
-    }
-    return mode ? modeMap[mode] || mode : ''
+const handleSubmit = (e?: React.FormEvent) => {
+  e?.preventDefault();
+  if (!trackingCode.trim()) {
+    setError('Please enter a tracking code');
+    return;
   }
+  fetchTrackingData(trackingCode.trim());
+};
 
-  const getPaymentModeText = (mode?: string) => {
-    const paymentMap: Record<string, string> = {
-      'bacs': 'BACS',
-      'credit_card': 'Carte de crédit',
-      'paypal': 'PayPal'
-    }
-    return mode ? paymentMap[mode] || mode : ''
-  }
+const routePoints = generateRoutePoints(trackingData);
 
-  const downloadTicket = () => {
-    if (!trackingData) return
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(trackingData, null, 2))
-    const link = document.createElement("a")
-    link.setAttribute("href", dataStr)
-    link.setAttribute("download", `ticket-${trackingCode}.json`)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+// Helper display functions
+const getStatusDisplayText = (status: string) => {
+  const statusMap: Record<string, string> = {
+    'pre_transit': 'Pre-transit',
+    'in_transit': 'In transit',
+    'out_for_delivery': 'Out for delivery',
+    'delivered': 'Delivered',
+    'returned': 'Returned'
+  };
+  return statusMap[status] || status;
+};
+
+const getShippingModeText = (mode?: string) => {
+  const modeMap: Record<string, string> = {
+    'land': 'Land transport',
+    'air': 'Air transport',
+    'sea': 'Sea transport'
+  };
+  return mode ? modeMap[mode] || mode : '';
+};
+
+const getPaymentModeText = (mode?: string) => {
+  const paymentMap: Record<string, string> = {
+    'bacs': 'BACS',
+    'credit_card': 'Credit card',
+    'paypal': 'PayPal'
+  };
+  return mode ? paymentMap[mode] || mode : '';
+};
+
+const downloadTicket = () => {
+  if (!trackingData) return;
+  const dataStr =
+    "data:text/json;charset=utf-8," +
+    encodeURIComponent(JSON.stringify(trackingData, null, 2));
+  const link = document.createElement("a");
+  link.setAttribute("href", dataStr);
+  link.setAttribute("download", `ticket-${trackingCode}.json`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
 
   const printTicket = () => window.print()
  return (

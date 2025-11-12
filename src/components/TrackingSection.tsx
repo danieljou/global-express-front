@@ -227,8 +227,7 @@ const getPaymentModeText = (mode?: string) => {
     'paypal': 'PayPal'
   };
   return mode ? paymentMap[mode] || mode : '';
-};
-const downloadTicket = () => {
+};const downloadTicket = () => {
   if (!trackingData) return;
 
   const canvas = document.createElement("canvas");
@@ -303,10 +302,11 @@ const downloadTicket = () => {
   write("Total Freight (€)", trackingData.total_freight);
   write("Expected Delivery", trackingData.expected_delivery_date);
 
+  // Pickup info (may not exist in type)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  write("Pickup Date", (trackingData as any).pickup_date);
+  write("Pickup Date", (trackingData as any)?.pickup_date);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  write("Pickup Time", (trackingData as any).pickup_time);
+  write("Pickup Time", (trackingData as any)?.pickup_time);
 
   y += 20;
   ctx.fillStyle = "#999";
@@ -314,26 +314,36 @@ const downloadTicket = () => {
   ctx.fillStyle = "#333";
   y += 30;
 
-  // Packages list
-  ctx.font = "bold 16px Arial";
-  ctx.fillText("Packages:", 40, y);
-  y += 25;
-  ctx.font = "14px Arial";
+  // Packages list (safety check)
+  if (trackingData.packages?.length) {
+    ctx.font = "bold 16px Arial";
+    ctx.fillText("Packages:", 40, y);
+    y += 25;
+    ctx.font = "14px Arial";
 
-  trackingData.packages.forEach((pkg, i) => {
-    ctx.fillText(
-      `${i + 1}. ${pkg.piece_type} — ${pkg.description} (${pkg.quantity} pcs, ${pkg.length}x${pkg.width}x${pkg.height} cm, ${pkg.weight ?? "?"} kg)`,
-      60,
-      y
-    );
-    y += 22;
-  });
+    trackingData.packages.forEach((pkg, i) => {
+      const pieceType = pkg.piece_type ?? "—";
+      const description = pkg.description ?? "—";
+      const quantity = pkg.quantity ?? "?";
+      const length = pkg.length ?? "?";
+      const width = pkg.width ?? "?";
+      const height = pkg.height ?? "?";
+      const weight = pkg.weight ?? "?";
 
-  y += 20;
-  ctx.fillStyle = "#999";
-  ctx.fillRect(40, y, 520, 1);
-  ctx.fillStyle = "#333";
-  y += 30;
+      ctx.fillText(
+        `${i + 1}. ${pieceType} — ${description} (${quantity} pcs, ${length}x${width}x${height} cm, ${weight} kg)`,
+        60,
+        y
+      );
+      y += 22;
+    });
+
+    y += 20;
+    ctx.fillStyle = "#999";
+    ctx.fillRect(40, y, 520, 1);
+    ctx.fillStyle = "#333";
+    y += 30;
+  }
 
   // Footer
   ctx.font = "italic 14px Arial";
@@ -346,6 +356,7 @@ const downloadTicket = () => {
   link.download = `ticket-${trackingData.tracking_number}.png`;
   link.click();
 };
+
 
 
 const printTicket = () => {

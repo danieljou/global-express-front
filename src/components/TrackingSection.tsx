@@ -228,7 +228,6 @@ const getPaymentModeText = (mode?: string) => {
   };
   return mode ? paymentMap[mode] || mode : '';
 };
-
 const downloadTicket = () => {
   if (!trackingData) return;
 
@@ -236,73 +235,77 @@ const downloadTicket = () => {
   const ctx = canvas.getContext("2d");
 
   if (!ctx) {
-  console.error("Canvas 2D context could not be initialized.");
-  return;
-}
+    console.error("Canvas 2D context could not be initialized.");
+    return;
+  }
 
-
-  // Canvas size (en pixels)
+  // Canvas size
   canvas.width = 600;
   canvas.height = 700;
 
-  // Fond blanc
+  // Background
   ctx.fillStyle = "#fff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Style général
+  // Header
   ctx.fillStyle = "#333";
-  ctx.font = "16px Arial";
-  let y = 40; // position verticale de départ
-
-  // Titre
   ctx.font = "bold 20px Arial";
+  let y = 40;
   ctx.fillText("📦 Shipment Receipt", 180, y);
   y += 40;
 
   ctx.font = "16px Arial";
   const lineHeight = 24;
 
-  // Fonction utilitaire pour écrire une ligne
+  // Helper function
   const write = (label: string, value: string | number | null | undefined) => {
     ctx.fillText(`${label}: ${value ?? "—"}`, 40, y);
     y += lineHeight;
   };
 
-  // Informations principales
+  // Main info
   write("Tracking Number", trackingData.tracking_number);
   write("Status", trackingData.status);
   y += 10;
+
   ctx.fillStyle = "#999";
   ctx.fillRect(40, y, 520, 1);
   ctx.fillStyle = "#333";
   y += 20;
 
+  // Sender info
   write("Sender", trackingData.sender_name);
   write("Sender Address", trackingData.sender_address);
   write("Sender Phone", trackingData.sender_phone);
   y += 10;
+
   ctx.fillStyle = "#999";
   ctx.fillRect(40, y, 520, 1);
   ctx.fillStyle = "#333";
   y += 20;
 
+  // Receiver info
   write("Receiver", trackingData.receiver_name);
   write("Receiver Address", trackingData.receiver_address);
   write("Receiver Phone", trackingData.receiver_phone);
   y += 10;
+
   ctx.fillStyle = "#999";
   ctx.fillRect(40, y, 520, 1);
   ctx.fillStyle = "#333";
   y += 20;
 
+  // Shipment info
   write("Origin", trackingData.origin_country);
   write("Destination", trackingData.destination_country);
   write("Shipment Type", trackingData.shipment_type);
   write("Weight (kg)", trackingData.weight);
   write("Total Freight (€)", trackingData.total_freight);
   write("Expected Delivery", trackingData.expected_delivery_date);
-  write("Pickup Date", trackingData.pickup_date);
-  write("Pickup Time", trackingData.pickup_time);
+
+  // Use 'as any' for pickup_date and pickup_time
+  write("Pickup Date", (trackingData as any).pickup_date);
+  write("Pickup Time", (trackingData as any).pickup_time);
 
   y += 20;
   ctx.fillStyle = "#999";
@@ -310,13 +313,33 @@ const downloadTicket = () => {
   ctx.fillStyle = "#333";
   y += 30;
 
+  // Packages list
+  ctx.font = "bold 16px Arial";
+  ctx.fillText("Packages:", 40, y);
+  y += 25;
+  ctx.font = "14px Arial";
+
+  trackingData.packages.forEach((pkg, i) => {
+    ctx.fillText(
+      `${i + 1}. ${pkg.piece_type} — ${pkg.description} (${pkg.quantity} pcs, ${pkg.length}x${pkg.width}x${pkg.height} cm, ${pkg.weight ?? "?"} kg)`,
+      60,
+      y
+    );
+    y += 22;
+  });
+
+  y += 20;
+  ctx.fillStyle = "#999";
+  ctx.fillRect(40, y, 520, 1);
+  ctx.fillStyle = "#333";
+  y += 30;
+
+  // Footer
   ctx.font = "italic 14px Arial";
   ctx.fillText(`Generated on ${new Date().toLocaleString()}`, 40, y);
 
-  // Convertir le canvas en image PNG
+  // Export to PNG
   const imageURL = canvas.toDataURL("image/png");
-
-  // Déclencher le téléchargement
   const link = document.createElement("a");
   link.href = imageURL;
   link.download = `ticket-${trackingData.tracking_number}.png`;

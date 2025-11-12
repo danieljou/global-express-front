@@ -1,5 +1,4 @@
 'use client';
-
 import { faBullseye, faEye, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ChangeEvent, KeyboardEvent, useState } from 'react';
@@ -16,7 +15,7 @@ export default function HeroSection({ onTrackingSuccess }: HeroSectionProps) {
 
   const handleTrack = async () => {
     console.log('Hero handleTrack called, trackingCode:', trackingCode);
-    
+
     if (!trackingCode.trim()) {
       setError('Please enter a tracking code');
       return;
@@ -38,9 +37,9 @@ export default function HeroSection({ onTrackingSuccess }: HeroSectionProps) {
 
       if (!response.ok) {
         if (response.status === 404) {
-          throw new Error('Code de suivi non trouvé');
+          throw new Error('Tracking code not found');
         }
-        throw new Error(`Échec de récupération des données (Status: ${response.status})`);
+        throw new Error(`Failed to fetch data (Status: ${response.status})`);
       }
 
       const data = await response.json();
@@ -49,7 +48,7 @@ export default function HeroSection({ onTrackingSuccess }: HeroSectionProps) {
       if (onTrackingSuccess) {
         onTrackingSuccess({
           trackingCode: trackingCode.trim(),
-          trackingData: data
+          trackingData: data,
         });
       }
 
@@ -59,15 +58,16 @@ export default function HeroSection({ onTrackingSuccess }: HeroSectionProps) {
           trackingSection.scrollIntoView({ behavior: 'smooth' });
         }
       }, 100);
-
     } catch (err: unknown) {
-    console.error('Hero Fetch error:', err);
-    if (err instanceof Error) {
-      setError(err.message);
-    } else {
-      setError('Une erreur inconnue est survenue.');
+      console.error('Hero Fetch error:', err);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred.');
+      }
+    } finally {
+      setIsLoading(false);
     }
-  }
   };
 
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -92,14 +92,14 @@ export default function HeroSection({ onTrackingSuccess }: HeroSectionProps) {
 
             {/* Quick Tracking Form */}
             <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mb-8">
-              <h3 className="text-lg font-semibold mb-4">Suivi Rapide de Colis</h3>
+              <h3 className="text-lg font-semibold mb-4">Quick Package Tracking</h3>
               <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="text"
                   value={trackingCode}
                   onChange={handleChange}
                   onKeyPress={handleKeyPress}
-                  placeholder="Entrez votre code de suivi..."
+                  placeholder="Enter your tracking code..."
                   className="flex-1 px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
                   disabled={isLoading}
                 />
@@ -111,14 +111,14 @@ export default function HeroSection({ onTrackingSuccess }: HeroSectionProps) {
                   {isLoading ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Suivi...
+                      Tracking...
                     </>
                   ) : (
-                    'Suivre'
+                    'Track'
                   )}
                 </button>
               </div>
-              
+
               {error && (
                 <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
                   <p className="text-red-700 dark:text-red-300 text-sm flex items-center">
@@ -127,17 +127,17 @@ export default function HeroSection({ onTrackingSuccess }: HeroSectionProps) {
                   </p>
                 </div>
               )}
-              
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Essayez : GT2024001234</p>
+
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Try: GT2024001234</p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
               <button className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
-                Obtenir un Devis
+                Get a Quote
               </button>
               <a href="#services" className="text-primary hover:underline">
                 <button className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-lg font-semibold transition-colors">
-                Nos Services
+                  Our Services
                 </button>
               </a>
             </div>
@@ -147,17 +147,17 @@ export default function HeroSection({ onTrackingSuccess }: HeroSectionProps) {
               <div className="text-center">
                 <FontAwesomeIcon icon={faBullseye} className="text-3xl text-primary mb-3" />
                 <h3 className="font-semibold mb-2">Mission</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Simplifier le commerce mondial</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Simplify global trade</p>
               </div>
               <div className="text-center">
                 <FontAwesomeIcon icon={faEye} className="text-3xl text-primary mb-3" />
                 <h3 className="font-semibold mb-2">Vision</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Solutions commerciales leaders</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Leading trade solutions</p>
               </div>
               <div className="text-center">
                 <FontAwesomeIcon icon={faHeart} className="text-3xl text-primary mb-3" />
-                <h3 className="font-semibold mb-2">Valeurs</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Confiance & Excellence</p>
+                <h3 className="font-semibold mb-2">Values</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Trust & Excellence</p>
               </div>
             </div>
           </div>

@@ -229,343 +229,343 @@ export default function TrackingSection({ heroTrackingData }: TrackingSectionPro
   }
 
   const printTicket = () => window.print()
-  return (
-    <section id="tracking" className="py-20 bg-white dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-5xl font-extrabold mb-3 text-gray-900 dark:text-white tracking-tight">
-              Suivi Avancé de Colis
-            </h2>
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-xl mx-auto">
-              Suivez vos expéditions en temps réel avec notre carte interactive
-            </p>
-          </div>
-
-          {/* Tracking Form */}
-          <div className="bg-gray-100 dark:bg-gray-900 p-8 rounded-xl shadow-lg mb-10">
-            <form className="flex flex-col sm:flex-row gap-4">
-              <input
-                type="text"
-                value={trackingCode}
-                onChange={(e) => setTrackingCode(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSubmit(e)}
-                placeholder="Entrez votre code de suivi..."
-                className="flex-1 px-5 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg 
-                           focus:outline-none focus:ring-4 focus:ring-primary/40 dark:bg-gray-800 dark:text-white"
-                disabled={isLoading}
-                aria-label="Code de suivi"
-              />
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                disabled={isLoading}
-                className="bg-primary hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed 
-                           text-white px-8 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center min-w-[160px]"
-              >
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
-                    Suivi en cours...
-                  </>
-                ) : (
-                  'Suivre le Colis'
-                )}
-              </button>
-            </form>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 italic">Essayez : GT2024001235</p>
-          </div>
-
-          {/* Error Message */}
-          {error && (
-            <div className="mb-8 max-w-3xl mx-auto">
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-700 rounded-lg p-5">
-                <div className="flex items-center space-x-3">
-                  <FontAwesomeIcon icon={faExclamationTriangle} className="text-red-600 dark:text-red-400" />
-                  <p className="text-red-700 dark:text-red-300 font-medium">{error}</p>
-                </div>
-              </div>
-            </div>
-          )}
+ return (
+  <section id="tracking" className="py-20 bg-white dark:bg-gray-900">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-14">
+          <h2 className="text-3xl md:text-5xl font-extrabold mb-3 text-gray-900 dark:text-white tracking-tight">
+            Advanced Parcel Tracking
+          </h2>
+          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-xl mx-auto">
+            Track your shipments in real time with our interactive map
+          </p>
         </div>
 
-        {/* Tracking Results */}
-        {trackingData && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-            {/* Header with Barcode and Actions */}
-            <div className="bg-gray-100 dark:bg-gray-700 px-8 py-4 border-b border-gray-200 dark:border-gray-600">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <FontAwesomeIcon icon={faBarcode} className="text-2xl text-gray-600" />
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                      Colis N° {trackingData.tracking_number}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      ETAT DE L&apos;EXPEDITION HONGROUTE
-                    </p>
-                  </div>
-                </div>
-                <div className="flex space-x-2">
-                  <button 
-                    onClick={printTicket}
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors flex items-center"
-                  >
-                    <FontAwesomeIcon icon={faPrint} className="mr-2" />
-                    <span>Imprimer</span>
-                  </button>
-                  <button 
-                    onClick={downloadTicket}
-                    className="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded-lg font-semibold transition-colors flex items-center"
-                  >
-                    <FontAwesomeIcon icon={faDownload} className="mr-2" />
-                    <span>Télécharger</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-8">
-              {/* Sender and Recipient Information */}
-              <div className="grid md:grid-cols-2 gap-8 mb-8">
-                <div>
-                  <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white border-b pb-2">
-                    Renseignements sur l&apos;expéditeur
-                  </h4>
-                  <div className="space-y-2 text-sm">
-                    <p><strong>{trackingData.sender_name}</strong></p>
-                    <p>{trackingData.sender_address}</p>
-                    <p>{trackingData.sender_phone}</p>
-                    <p className="text-blue-600">{trackingData.sender_email}</p>
-                    {trackingData.sender_coordinates && (
-                      <p className="text-gray-500 text-xs">
-                        Coordonnées: {trackingData.sender_coordinates[0].toFixed(6)}, {trackingData.sender_coordinates[1].toFixed(6)}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white border-b pb-2">
-                    Informations sur le récepteur
-                  </h4>
-                  <div className="space-y-2 text-sm">
-                    <p><strong>{trackingData.receiver_name}</strong></p>
-                    <p>{trackingData.receiver_address}</p>
-                    <p>{trackingData.receiver_phone}</p>
-                    <p className="text-blue-600">{trackingData.receiver_email}</p>
-                    {trackingData.receiver_coordinates && (
-                      <p className="text-gray-500 text-xs">
-                        Coordonnées: {trackingData.receiver_coordinates[0].toFixed(6)}, {trackingData.receiver_coordinates[1].toFixed(6)}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Expedition Information */}
-              <div className="mb-8">
-                <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white border-b pb-2">
-                  Informations sur l&apos;expédition
-                </h4>
-                <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Origine :</p>
-                    <p className="font-semibold">{trackingData.origin_country}</p>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Destination :</p>
-                    <p className="font-semibold">{trackingData.destination_country}</p>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Poids :</p>
-                    <p className="font-semibold">{trackingData.weight}kg</p>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Type :</p>
-                    <p className="font-semibold">{trackingData.shipment_type}</p>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total du fret :</p>
-                    <p className="font-semibold">{trackingData.total_freight}€</p>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Date de livraison :</p>
-                   <p className="font-semibold">
-                      {trackingData.expected_delivery_date
-                        ? new Date(trackingData.expected_delivery_date).toLocaleDateString('fr-FR')
-                        : "—"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Package Details */}
-              <div className="mb-8">
-                <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white border-b pb-2">
-                  Détails du colis
-                </h4>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="flex items-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                    <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Packages :</p>
-                      <p className="font-semibold text-gray-900 dark:text-white">{trackingData.packages?.length || 0}</p>
-                      <p className="text-sm text-green-600 dark:text-green-400">
-                        {getStatusDisplayText(trackingData.status)}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Transporteur :</p>
-                    <p className="font-semibold text-gray-900 dark:text-white">{trackingData.carrier}</p>
-                    <p className="text-sm text-blue-600">Réf: {trackingData.carrier_reference}</p>
-                  </div>
-                  <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Mode d&apos;expédition :</p>
-                    <p className="font-semibold text-gray-900 dark:text-white">
-                      {getShippingModeText(trackingData.shipping_mode)}
-                    </p>
-                  </div>
-                  <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Mode de paiement :</p>
-                    <p className="font-semibold text-gray-900 dark:text-white">
-                      {getPaymentModeText(trackingData.payment_mode)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Package Specifications Table */}
-              {trackingData.packages && trackingData.packages.length > 0 && (
-                <div className="mb-8">
-                  <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
-                    Spécifications du colis
-                  </h4>
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse border border-gray-300 dark:border-gray-600">
-                      <thead>
-                        <tr className="bg-green-600 text-white">
-                          <th className="border border-gray-300 px-4 py-2 text-left">Qté</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Type de pièce</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Description</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Longueur (cm)</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Largeur (cm)</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Hauteur (cm)</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Poids (kg)</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {trackingData.packages.map((pkg, index) => (
-                          <tr key={pkg.id || index} className="bg-white dark:bg-gray-800">
-                            <td className="border border-gray-300 px-4 py-2">{pkg.quantity}</td>
-                            <td className="border border-gray-300 px-4 py-2">{pkg.piece_type}</td>
-                            <td className="border border-gray-300 px-4 py-2">{pkg.description}</td>
-                            <td className="border border-gray-300 px-4 py-2">{pkg.length || '-'}</td>
-                            <td className="border border-gray-300 px-4 py-2">{pkg.width || '-'}</td>
-                            <td className="border border-gray-300 px-4 py-2">{pkg.height || '-'}</td>
-                            <td className="border border-gray-300 px-4 py-2">{pkg.weight || '-'}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+        {/* Tracking Form */}
+        <div className="bg-gray-100 dark:bg-gray-900 p-8 rounded-xl shadow-lg mb-10">
+          <form className="flex flex-col sm:flex-row gap-4">
+            <input
+              type="text"
+              value={trackingCode}
+              onChange={(e) => setTrackingCode(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSubmit(e)}
+              placeholder="Enter your tracking code..."
+              className="flex-1 px-5 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg 
+                         focus:outline-none focus:ring-4 focus:ring-primary/40 dark:bg-gray-800 dark:text-white"
+              disabled={isLoading}
+              aria-label="Tracking code"
+            />
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className="bg-primary hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed 
+                         text-white px-8 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center min-w-[160px]"
+            >
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
+                  Tracking in progress...
+                </>
+              ) : (
+                'Track Package'
               )}
+            </button>
+          </form>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 italic">Try: GT2024001235</p>
+        </div>
 
-              {/* Interactive Map Section */}
-              {routePoints.length > 0 && (
-                <div className="mb-8">
-                  <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Itinéraire du Colis</h4>
-                  
-                  <div className="flex gap-2 mb-4">
-                    <button 
-                      className={`px-3 py-1 rounded text-sm font-medium transition-colors ${currentSpeed === 0.5 ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
-                      onClick={() => setCurrentSpeed(0.5)}
-                    >
-                      Lent
-                    </button>
-                    <button 
-                      className={`px-3 py-1 rounded text-sm font-medium transition-colors ${currentSpeed === 1 ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
-                      onClick={() => setCurrentSpeed(1)}
-                    >
-                      Normal
-                    </button>
-                    <button 
-                      className={`px-3 py-1 rounded text-sm font-medium transition-colors ${currentSpeed === 2 ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
-                      onClick={() => setCurrentSpeed(2)}
-                    >
-                      Rapide
-                    </button>
-                  </div>
-                  
-                  <div className="rounded-lg overflow-hidden shadow-lg">
-                    <InteractiveMap routePoints={routePoints} currentSpeed={currentSpeed} />
-                  </div>
-                  
-                  <div className="mt-4 flex items-center text-gray-700 dark:text-gray-300">
-                    <FontAwesomeIcon icon={faClock} className="mr-2" />
-                    <strong>Livraison prévue le :</strong> 
-                    {trackingData.expected_delivery_date && (
-                    <span className="ml-2">
-                      {new Date(trackingData.expected_delivery_date).toLocaleDateString('fr-FR')}
-                    </span>
-                  )}
-                  </div>
-                </div>
-              )}
-
-              {/* Tracking History */}
-              {trackingData.history && trackingData.history.length > 0 && (
-                <div>
-                  <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Historique des expéditions</h4>
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse border border-gray-300 dark:border-gray-600">
-                      <thead>
-                        <tr className="bg-green-600 text-white">
-                          <th className="border border-gray-300 px-4 py-2 text-left">Date</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Heure</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Emplacement</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Statut</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Mis à jour par</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Remarques</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {trackingData.history.map((historyItem, index) => (
-                          <tr key={historyItem.id || index} className="bg-blue-50 dark:bg-blue-900/20">
-                            <td className="border border-gray-300 px-4 py-2 font-medium">
-                              {new Date(historyItem.date).toLocaleDateString('fr-FR')}
-                            </td>
-                            <td className="border border-gray-300 px-4 py-2">{historyItem.time}</td>
-                            <td className="border border-gray-300 px-4 py-2">{historyItem.location}</td>
-                            <td className="border border-gray-300 px-4 py-2">
-                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                {historyItem.status}
-                              </span>
-                            </td>
-                            <td className="border border-gray-300 px-4 py-2">{historyItem.updated_by}</td>
-                            <td className="border border-gray-300 px-4 py-2">{historyItem.remarks || 'N/A'}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-
-              {/* Comments Section */}
-              {trackingData.comments && (
-                <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <h5 className="font-semibold mb-2 text-gray-900 dark:text-white">Commentaires :</h5>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 italic">
-                    {trackingData.comments}
-                  </p>
-                </div>
-              )}
+        {/* Error Message */}
+        {error && (
+          <div className="mb-8 max-w-3xl mx-auto">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-700 rounded-lg p-5">
+              <div className="flex items-center space-x-3">
+                <FontAwesomeIcon icon={faExclamationTriangle} className="text-red-600 dark:text-red-400" />
+                <p className="text-red-700 dark:text-red-300 font-medium">{error}</p>
+              </div>
             </div>
           </div>
         )}
       </div>
-    </section>
-  )
+
+      {/* Tracking Results */}
+      {trackingData && (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+          {/* Header with Barcode and Actions */}
+          <div className="bg-gray-100 dark:bg-gray-700 px-8 py-4 border-b border-gray-200 dark:border-gray-600">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <FontAwesomeIcon icon={faBarcode} className="text-2xl text-gray-600" />
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                    Package No. {trackingData.tracking_number}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    SHIPMENT STATUS - IN TRANSIT
+                  </p>
+                </div>
+              </div>
+              <div className="flex space-x-2">
+                <button 
+                  onClick={printTicket}
+                  className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors flex items-center"
+                >
+                  <FontAwesomeIcon icon={faPrint} className="mr-2" />
+                  <span>Print</span>
+                </button>
+                <button 
+                  onClick={downloadTicket}
+                  className="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded-lg font-semibold transition-colors flex items-center"
+                >
+                  <FontAwesomeIcon icon={faDownload} className="mr-2" />
+                  <span>Download</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-8">
+            {/* Sender and Recipient Information */}
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <div>
+                <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white border-b pb-2">
+                  Sender Information
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <p><strong>{trackingData.sender_name}</strong></p>
+                  <p>{trackingData.sender_address}</p>
+                  <p>{trackingData.sender_phone}</p>
+                  <p className="text-blue-600">{trackingData.sender_email}</p>
+                  {trackingData.sender_coordinates && (
+                    <p className="text-gray-500 text-xs">
+                      Coordinates: {trackingData.sender_coordinates[0].toFixed(6)}, {trackingData.sender_coordinates[1].toFixed(6)}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div>
+                <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white border-b pb-2">
+                  Receiver Information
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <p><strong>{trackingData.receiver_name}</strong></p>
+                  <p>{trackingData.receiver_address}</p>
+                  <p>{trackingData.receiver_phone}</p>
+                  <p className="text-blue-600">{trackingData.receiver_email}</p>
+                  {trackingData.receiver_coordinates && (
+                    <p className="text-gray-500 text-xs">
+                      Coordinates: {trackingData.receiver_coordinates[0].toFixed(6)}, {trackingData.receiver_coordinates[1].toFixed(6)}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Shipment Information */}
+            <div className="mb-8">
+              <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white border-b pb-2">
+                Shipment Information
+              </h4>
+              <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Origin:</p>
+                  <p className="font-semibold">{trackingData.origin_country}</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Destination:</p>
+                  <p className="font-semibold">{trackingData.destination_country}</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Weight:</p>
+                  <p className="font-semibold">{trackingData.weight}kg</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Type:</p>
+                  <p className="font-semibold">{trackingData.shipment_type}</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Freight:</p>
+                  <p className="font-semibold">{trackingData.total_freight}€</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Delivery Date:</p>
+                  <p className="font-semibold">
+                    {trackingData.expected_delivery_date
+                      ? new Date(trackingData.expected_delivery_date).toLocaleDateString('en-GB')
+                      : "—"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Package Details */}
+            <div className="mb-8">
+              <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white border-b pb-2">
+                Package Details
+              </h4>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="flex items-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                  <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Packages:</p>
+                    <p className="font-semibold text-gray-900 dark:text-white">{trackingData.packages?.length || 0}</p>
+                    <p className="text-sm text-green-600 dark:text-green-400">
+                      {getStatusDisplayText(trackingData.status)}
+                    </p>
+                  </div>
+                </div>
+                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Carrier:</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{trackingData.carrier}</p>
+                  <p className="text-sm text-blue-600">Ref: {trackingData.carrier_reference}</p>
+                </div>
+                <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Shipping Mode:</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    {getShippingModeText(trackingData.shipping_mode)}
+                  </p>
+                </div>
+                <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Payment Mode:</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    {getPaymentModeText(trackingData.payment_mode)}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Package Specifications Table */}
+            {trackingData.packages && trackingData.packages.length > 0 && (
+              <div className="mb-8">
+                <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+                  Package Specifications
+                </h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse border border-gray-300 dark:border-gray-600">
+                    <thead>
+                      <tr className="bg-green-600 text-white">
+                        <th className="border border-gray-300 px-4 py-2 text-left">Qty</th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">Piece Type</th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">Description</th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">Length (cm)</th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">Width (cm)</th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">Height (cm)</th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">Weight (kg)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {trackingData.packages.map((pkg, index) => (
+                        <tr key={pkg.id || index} className="bg-white dark:bg-gray-800">
+                          <td className="border border-gray-300 px-4 py-2">{pkg.quantity}</td>
+                          <td className="border border-gray-300 px-4 py-2">{pkg.piece_type}</td>
+                          <td className="border border-gray-300 px-4 py-2">{pkg.description}</td>
+                          <td className="border border-gray-300 px-4 py-2">{pkg.length || '-'}</td>
+                          <td className="border border-gray-300 px-4 py-2">{pkg.width || '-'}</td>
+                          <td className="border border-gray-300 px-4 py-2">{pkg.height || '-'}</td>
+                          <td className="border border-gray-300 px-4 py-2">{pkg.weight || '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Interactive Map Section */}
+            {routePoints.length > 0 && (
+              <div className="mb-8">
+                <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Package Route</h4>
+
+                <div className="flex gap-2 mb-4">
+                  <button 
+                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${currentSpeed === 0.5 ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
+                    onClick={() => setCurrentSpeed(0.5)}
+                  >
+                    Slow
+                  </button>
+                  <button 
+                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${currentSpeed === 1 ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
+                    onClick={() => setCurrentSpeed(1)}
+                  >
+                    Normal
+                  </button>
+                  <button 
+                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${currentSpeed === 2 ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
+                    onClick={() => setCurrentSpeed(2)}
+                  >
+                    Fast
+                  </button>
+                </div>
+
+                <div className="rounded-lg overflow-hidden shadow-lg">
+                  <InteractiveMap routePoints={routePoints} currentSpeed={currentSpeed} />
+                </div>
+
+                <div className="mt-4 flex items-center text-gray-700 dark:text-gray-300">
+                  <FontAwesomeIcon icon={faClock} className="mr-2" />
+                  <strong>Expected delivery date:</strong> 
+                  {trackingData.expected_delivery_date && (
+                    <span className="ml-2">
+                      {new Date(trackingData.expected_delivery_date).toLocaleDateString('en-GB')}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Tracking History */}
+            {trackingData.history && trackingData.history.length > 0 && (
+              <div>
+                <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Shipment History</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse border border-gray-300 dark:border-gray-600">
+                    <thead>
+                      <tr className="bg-green-600 text-white">
+                        <th className="border border-gray-300 px-4 py-2 text-left">Date</th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">Time</th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">Location</th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">Updated By</th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">Remarks</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {trackingData.history.map((historyItem, index) => (
+                        <tr key={historyItem.id || index} className="bg-blue-50 dark:bg-blue-900/20">
+                          <td className="border border-gray-300 px-4 py-2 font-medium">
+                            {new Date(historyItem.date).toLocaleDateString('en-GB')}
+                          </td>
+                          <td className="border border-gray-300 px-4 py-2">{historyItem.time}</td>
+                          <td className="border border-gray-300 px-4 py-2">{historyItem.location}</td>
+                          <td className="border border-gray-300 px-4 py-2">
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                              {historyItem.status}
+                            </span>
+                          </td>
+                          <td className="border border-gray-300 px-4 py-2">{historyItem.updated_by}</td>
+                          <td className="border border-gray-300 px-4 py-2">{historyItem.remarks || 'N/A'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Comments Section */}
+            {trackingData.comments && (
+              <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <h5 className="font-semibold mb-2 text-gray-900 dark:text-white">Comments:</h5>
+                <p className="text-sm text-gray-700 dark:text-gray-300 italic">
+                  {trackingData.comments}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+)
 }

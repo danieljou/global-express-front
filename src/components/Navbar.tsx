@@ -44,7 +44,7 @@ export default function Navbar() {
 
           {/* Controls */}
           <div className="flex items-center space-x-4">
-            <LanguageToggle />
+            {/* <LanguageToggle /> */}
             <DarkModeToggle />
 
             {/* Mobile Menu Button */}

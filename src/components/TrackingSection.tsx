@@ -303,8 +303,9 @@ const downloadTicket = () => {
   write("Total Freight (€)", trackingData.total_freight);
   write("Expected Delivery", trackingData.expected_delivery_date);
 
-  // Use 'as any' for pickup_date and pickup_time
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   write("Pickup Date", (trackingData as any).pickup_date);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   write("Pickup Time", (trackingData as any).pickup_time);
 
   y += 20;

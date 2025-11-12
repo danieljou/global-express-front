@@ -240,8 +240,8 @@ const downloadTicket = () => {
     return;
   }
 
-  // Canvas size (smaller, like a real ticket)
-  canvas.width = 400;
+  // Canvas size
+  canvas.width = 600;
   canvas.height = 700;
 
   // Background
@@ -250,62 +250,51 @@ const downloadTicket = () => {
 
   // Header
   ctx.fillStyle = "#333";
-  ctx.font = "bold 18px Arial";
-  let y = 20;
-  ctx.fillText("📦 Shipment Receipt", 100, y);
-  y += 30;
+  ctx.font = "bold 20px Arial";
+  let y = 40;
+  ctx.fillText("📦 Shipment Receipt", 180, y);
+  y += 40;
 
-  ctx.font = "14px Arial";
-  const lineHeight = 20;
+  ctx.font = "16px Arial";
+  const lineHeight = 24;
 
-  // Helper function with auto-wrap
-  const write = (label: string, value: string | number | null | undefined, maxWidth = 320) => {
-    const text = `${label}: ${value ?? "—"}`;
-    const words = text.split(" ");
-    let line = "";
-    for (let i = 0; i < words.length; i++) {
-      const testLine = line + words[i] + " ";
-      const metrics = ctx.measureText(testLine);
-      if (metrics.width > maxWidth && i > 0) {
-        ctx.fillText(line, 40, y);
-        line = words[i] + " ";
-        y += lineHeight;
-      } else {
-        line = testLine;
-      }
-    }
-    if (line) {
-      ctx.fillText(line, 40, y);
-      y += lineHeight;
-    }
-  };
-
-  // Separator
-  const separator = () => {
-    ctx.fillStyle = "#ccc";
-    ctx.fillRect(20, y, 360, 1);
-    ctx.fillStyle = "#333";
-    y += 10;
+  // Helper function
+  const write = (label: string, value: string | number | null | undefined) => {
+    ctx.fillText(`${label}: ${value ?? "—"}`, 40, y);
+    y += lineHeight;
   };
 
   // Main info
   write("Tracking Number", trackingData.tracking_number);
   write("Status", trackingData.status);
-  separator();
+  y += 10;
+
+  ctx.fillStyle = "#999";
+  ctx.fillRect(40, y, 520, 1);
+  ctx.fillStyle = "#333";
+  y += 20;
 
   // Sender info
   write("Sender", trackingData.sender_name);
   write("Sender Address", trackingData.sender_address);
   write("Sender Phone", trackingData.sender_phone);
-  y += 5;
-  separator();
+  y += 10;
+
+  ctx.fillStyle = "#999";
+  ctx.fillRect(40, y, 520, 1);
+  ctx.fillStyle = "#333";
+  y += 20;
 
   // Receiver info
   write("Receiver", trackingData.receiver_name);
   write("Receiver Address", trackingData.receiver_address);
   write("Receiver Phone", trackingData.receiver_phone);
-  y += 5;
-  separator();
+  y += 10;
+
+  ctx.fillStyle = "#999";
+  ctx.fillRect(40, y, 520, 1);
+  ctx.fillStyle = "#333";
+  y += 20;
 
   // Shipment info
   write("Origin", trackingData.origin_country);
@@ -314,29 +303,52 @@ const downloadTicket = () => {
   write("Weight (kg)", trackingData.weight);
   write("Total Freight (€)", trackingData.total_freight);
   write("Expected Delivery", trackingData.expected_delivery_date);
+
+  // Pickup info (may not exist in type)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   write("Pickup Date", (trackingData as any)?.pickup_date);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   write("Pickup Time", (trackingData as any)?.pickup_time);
-  separator();
 
-  // Packages
+  y += 20;
+  ctx.fillStyle = "#999";
+  ctx.fillRect(40, y, 520, 1);
+  ctx.fillStyle = "#333";
+  y += 30;
+
+  // Packages list (safety check)
   if (trackingData.packages?.length) {
-    ctx.font = "bold 14px Arial";
+    ctx.font = "bold 16px Arial";
     ctx.fillText("Packages:", 40, y);
-    y += 20;
+    y += 25;
     ctx.font = "14px Arial";
 
     trackingData.packages.forEach((pkg, i) => {
-      const pkgText = `${i + 1}. ${pkg.piece_type ?? "—"} — ${pkg.description ?? "—"} (${pkg.quantity ?? "?"} pcs, ${pkg.length ?? "?"}x${pkg.width ?? "?"}x${pkg.height ?? "?"} cm, ${pkg.weight ?? "?"} kg)`;
-      write("", pkgText, 320);
-      y += 2;
+      const pieceType = pkg.piece_type ?? "—";
+      const description = pkg.description ?? "—";
+      const quantity = pkg.quantity ?? "?";
+      const length = pkg.length ?? "?";
+      const width = pkg.width ?? "?";
+      const height = pkg.height ?? "?";
+      const weight = pkg.weight ?? "?";
+
+      ctx.fillText(
+        `${i + 1}. ${pieceType} — ${description} (${quantity} pcs, ${length}x${width}x${height} cm, ${weight} kg)`,
+        60,
+        y
+      );
+      y += 22;
     });
-    separator();
+
+    y += 20;
+    ctx.fillStyle = "#999";
+    ctx.fillRect(40, y, 520, 1);
+    ctx.fillStyle = "#333";
+    y += 30;
   }
 
   // Footer
-  ctx.font = "italic 12px Arial";
+  ctx.font = "italic 14px Arial";
   ctx.fillText(`Generated on ${new Date().toLocaleString()}`, 40, y);
 
   // Export to PNG
@@ -346,8 +358,6 @@ const downloadTicket = () => {
   link.download = `ticket-${trackingData.tracking_number}.png`;
   link.click();
 };
-
-
 
 
 const printTicket = () => {

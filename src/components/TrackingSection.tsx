@@ -243,30 +243,46 @@ const downloadTicket = () => {
 };
 
 
-  const printTicket = () => {
+const printTicket = () => {
   const content = document.getElementById('track');
   if (!content) return;
 
-  const printWindow = window.open('', '', 'width=800,height=600');
+  // Crée une nouvelle fenêtre pour l'impression
+  const printWindow = window.open('', '', 'width=900,height=700');
   if (!printWindow) return;
 
+  // Clone le contenu du head (styles, liens, icônes)
+  const headContent = document.head.innerHTML;
+
+  // Injecte le contenu avec les styles actuels
   printWindow.document.write(`
     <html>
       <head>
-        <title>Tracking Ticket</title>
+        ${headContent}
+        <title>Shipment Tracking</title>
         <style>
-          body { font-family: sans-serif; padding: 20px; }
+          @media print {
+            body { margin: 0; background: white; }
+          }
         </style>
       </head>
-      <body>${content.innerHTML}</body>
+      <body>
+        ${content.innerHTML}
+      </body>
     </html>
   `);
+
   printWindow.document.close();
-  printWindow.focus();
-  printWindow.print();
-  printWindow.close();
+
+  // Attend un peu pour que les styles se chargent
+  printWindow.onload = () => {
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
 };
- 
+
+
   // window.print()
  return (
   <section id="tracking" className="py-20 bg-white dark:bg-gray-900">

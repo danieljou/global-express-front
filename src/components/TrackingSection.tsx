@@ -263,8 +263,8 @@ const downloadTicket = () => {
   const lineHeight = 24;
 
   // Fonction utilitaire pour écrire une ligne
-  const write = (label, value) => {
-    ctx.fillText(`${label}: ${value || "—"}`, 40, y);
+  const write = (label: string, value: string | number | null | undefined) => {
+    ctx.fillText(`${label}: ${value ?? "—"}`, 40, y);
     y += lineHeight;
   };
 

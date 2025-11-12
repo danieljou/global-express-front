@@ -235,6 +235,12 @@ const downloadTicket = () => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
+  if (!ctx) {
+  console.error("Canvas 2D context could not be initialized.");
+  return;
+}
+
+
   // Canvas size (en pixels)
   canvas.width = 600;
   canvas.height = 700;
